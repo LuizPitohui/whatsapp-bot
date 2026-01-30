@@ -1,0 +1,66 @@
+# ------------------------------------------------
+# 🔐 SEGURANÇA E AMBIENTE (Crucial)
+# ------------------------------------------------
+#.env
+#.env.local
+#.env.*
+*.log
+*.pot
+*.pyc
+__pycache__/
+
+# ------------------------------------------------
+# 🐍 PYTHON / DJANGO / POETRY
+# ------------------------------------------------
+.venv/
+venv/
+env/
+*.egg-info/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Django Defaults
+db.sqlite3
+media/
+staticfiles/
+backend/static/
+backend/media/
+
+# ------------------------------------------------
+# 🟢 NODE.JS / WPPCONNECT SERVER
+# ------------------------------------------------
+node_modules/
+wppconnect-server/node_modules/
+dist/
+wppconnect-server/dist/
+npm-debug.log
+yarn-error.log
+.yarn/
+.pnp.*
+
+# ------------------------------------------------
+# 📱 WPPCONNECT SESSIONS (NUNCA COMMITE ISSO)
+# ------------------------------------------------
+# Contém os dados de login do WhatsApp. Se vazar,
+# qualquer um pode usar seu número.
+wpp_sessions/
+tokens/
+userDataDir/
+.wppconnect/
+
+# ------------------------------------------------
+# 🐳 DOCKER & VOLUMES
+# ------------------------------------------------
+# Dados persistentes locais do Banco e Redis
+postgres_data/
+redis_data/
+
+# ------------------------------------------------
+# 💻 IDEs E SISTEMA OPERACIONAL
+# ------------------------------------------------
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db

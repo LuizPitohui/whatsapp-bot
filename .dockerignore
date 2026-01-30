@@ -1,0 +1,8 @@
+wppconnect-server/
+wpp_sessions/
+.git/
+__pycache__/
+*.pyc
+env/
+venv/
+.env

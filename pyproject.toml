@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "norte-tech-bot"
+version = "2.0.0"
+description = "Chatbot Corporativo Norte Tech"
+authors = ["Luiz Fernando"]
+package-mode = false
+
+[tool.poetry.dependencies]
+python = "^3.12"
+
+# Django 5.1 é a base sólida para o projeto neste momento
+django = "^5.1"
+djangorestframework = "^3.15"
+
+# CORREÇÃO AQUI: Usamos ^2.32 para aceitar a 2.32.5 (sua atual)
+requests = "^2.32"
+
+python-decouple = "^3.8"
+gunicorn = "^23.0"
+psycopg = {extras = ["binary"], version = "^3.2"}
+redis = "^5.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
