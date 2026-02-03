@@ -3,11 +3,20 @@ import json
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from django.shortcuts import render
 from .models import Colaborador, Atendimento
 from .services import WppConnectService 
 from .constants import MENU_INICIAL, SETORES, MSG_AGUARDANDO_DETALHES, MSG_ENCAMINHADO, MSG_ERRO_GENERICO
 
 logger = logging.getLogger(__name__)
+
+# 🔒 CONFIGURAÇÃO DE SEGURANÇA (WHITELIST)
+# Adicione aqui todos os IDs que podem falar com o bot
+NUMEROS_PERMITIDOS = [
+    "5592985621293@c.us",   # Seu Celular Principal (com o 9 dígito)
+    "559285621293@c.us",    # Seu Celular (formato antigo sem o 9, por garantia)
+    "147176365772893@lid",  # 📱 Seu Tablet SI-03 (Identificado nos logs)
+]
 
 class WebhookView(APIView):
     def post(self, request):
@@ -23,8 +32,7 @@ class WebhookView(APIView):
         if 'onmessage' in event:
             print(f"\n📩 PROCESSANDO MENSAGEM (Evento: {event})")
 
-            # 2. Estratégia de Busca Inteligente (O Segredo!)
-            # Tenta pegar os dados da raiz (seu caso) OU de dentro de 'data' (padrão)
+            # 2. Estratégia de Busca Inteligente
             payload = data.get('data') if 'data' in data and isinstance(data['data'], dict) else data
 
             # 3. Extração dos Campos
@@ -35,30 +43,47 @@ class WebhookView(APIView):
             notify_name = payload.get('notifyName', 'Cliente')
 
             print(f"   👤 De: {notify_name} ({sender})")
-            print(f"   💬 Texto: {body}")
-
+            
             # 4. Filtros de Segurança
+            
+            # A. Ignora mensagens enviadas por mim mesmo
             if from_me:
                 print("   🚫 Ignorando mensagem enviada por mim.")
                 return Response(status=status.HTTP_200_OK)
             
+            # B. Ignora Grupos
             if is_group:
                 print("   🚫 Ignorando mensagem de grupo.")
                 return Response(status=status.HTTP_200_OK)
+
+            # C. 🔒 WHITELIST (O Porteiro)
+            # Verifica se o remetente está na lista de permitidos
+            if sender not in NUMEROS_PERMITIDOS:
+                print(f"   🔒 BLOQUEADO: O número {sender} não está na lista de permitidos.")
+                # DICA: Se quiser desbloquear temporariamente para testes, comente as duas linhas abaixo
+                return Response(status=status.HTTP_200_OK)
+
+            # -------------------------------
 
             if not body or not sender:
                 print("   ⚠️ Dados incompletos, ignorando.")
                 return Response(status=status.HTTP_200_OK)
 
             # 5. LÓGICA DO BOT (MÁQUINA DE ESTADOS)
-            print("   ✅ Mensagem Válida! Iniciando lógica de atendimento...")
+            print("   ✅ Mensagem Autorizada! Iniciando lógica de atendimento...")
             
             try:
                 # A. Identifica/Cria Colaborador
-                colaborador, _ = Colaborador.objects.get_or_create(
+                # Usa o notifyName se o nome não existir, senão mantém o antigo
+                colaborador, created = Colaborador.objects.get_or_create(
                     telefone=sender,
                     defaults={'nome': notify_name}
                 )
+                
+                # Se for um ID estranho (tablet), tenta atualizar o nome se estiver genérico
+                if not created and colaborador.nome == 'Cliente' and notify_name != 'Cliente':
+                    colaborador.nome = notify_name
+                    colaborador.save()
 
                 # B. Busca Atendimento Aberto
                 atendimento = Atendimento.objects.filter(
@@ -111,7 +136,7 @@ class WebhookView(APIView):
                     )
                     client.enviar_texto(sender, msg_final)
                     
-                    # (Opcional) Aqui você colocaria o envio para o grupo do setor
+                    # (Opcional) Envio para grupo do setor
                     # client.enviar_para_grupo(setor_info['grupo_id'], "Nova solicitação...")
 
                     atendimento.estagio = 'FINALIZADO'
@@ -124,3 +149,12 @@ class WebhookView(APIView):
                 logger.error(e)
 
         return Response(status=status.HTTP_200_OK)
+
+# --- VIEW DO DASHBOARD ---
+def dashboard_home(request):
+    # Pega os atendimentos ordenados por data (mais recente primeiro)
+    atendimentos = Atendimento.objects.select_related('colaborador').all().order_by('-data_inicio')
+    
+    return render(request, 'dashboard/home.html', {
+        'atendimentos': atendimentos
+    })

@@ -1,8 +1,11 @@
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path
+from bot.views import WebhookView, dashboard_home  # <--- Importe aqui
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # Inclui as rotas do bot com o prefixo /api/
-    path('api/', include('bot.urls')),
+    path('api/webhook/', WebhookView.as_view(), name='webhook'),
+    
+    # NOVA ROTA:
+    path('dashboard/', dashboard_home, name='dashboard'),
 ]

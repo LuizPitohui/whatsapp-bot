@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Norte Tech | Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <style>
+        body { background-color: #f4f6f9; font-family: sans-serif; }
+        .sidebar { min-height: 100vh; background-color: #212529; }
+        .sidebar a { color: #adb5bd; text-decoration: none; padding: 12px; display: block; }
+        .sidebar a:hover, .sidebar a.active { background-color: #0d6efd; color: white; border-radius: 5px;}
+        .card-custom { border: none; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+    </style>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 sidebar">
+            <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-3 text-white min-vh-100">
+                <a href="/" class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+                    <span class="fs-4 fw-bold">🤖 Norte Tech</span>
+                </a>
+                <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start w-100">
+                    <li class="nav-item w-100">
+                        <a href="/dashboard/" class="nav-link align-middle px-0 active">
+                            <i class="fs-4 bi-speedometer2"></i> <span class="ms-1 d-none d-sm-inline">Painel</span>
+                        </a>
+                    </li>
+                    <li class="w-100">
+                        <a href="#" class="nav-link px-0 align-middle">
+                            <i class="fs-4 bi-whatsapp"></i> <span class="ms-1 d-none d-sm-inline">Atendimentos</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="col py-3">
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+</div>
+</body>
+</html>

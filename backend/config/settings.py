@@ -71,11 +71,11 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': config('DB_NAME', default='evolution'),
-        'USER': config('DB_USER', default='evolution'),
-        'PASSWORD': config('DB_PASSWORD', default='evolution'),
-        'HOST': config('DB_HOST', default='postgres'), # Nome do serviço no docker-compose
-        'PORT': config('DB_PORT', default='5432'),
+        'NAME': 'evolution',
+        'USER': 'evolution',
+        'PASSWORD': 'evolution',
+        'HOST': 'postgres', 
+        'PORT': '5432',
     }
 }
 
