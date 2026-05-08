@@ -1,4 +1,4 @@
-🤖 Norte Tech Bot - Sistema de Atendimento via WhatsApp
+🤖 Bot - Sistema de Atendimento via WhatsApp
 Este projeto é um sistema de Chatbot para triagem e atendimento automático via WhatsApp, orquestrado via Docker. Ele utiliza o WPPConnect para a interface com o WhatsApp e Django (Python) como o cérebro lógico (Máquina de Estados).
 
 🏗 Arquitetura do Sistema
