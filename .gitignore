@@ -63,4 +63,8 @@ redis_data/
 .idea/
 *.swp
 .DS_Store
-Thumbs.db
+Thumbs.db.env
+.env.local
+.env.*.local
+.env.prod
+!.env*.example
